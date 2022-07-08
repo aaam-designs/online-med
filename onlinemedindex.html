@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form onsubmit="return createUrl()">
+      <input type="text" name="userId" placeholder="user id" />
+      <input
+        type="text"
+        name="phoneNumber"
+        placeholder="countrycode & phone number"
+      />
+      <input type="email" name="email" placeholder="email" />
+
+      <input type="text" name="redirectUrl" placeholder="redirect url" />
+      <input type="submit" />
+    </form>
+
+    <script>
+      const createUrl = () => {
+        const formData = new FormData(document.querySelector("form"));
+        let formEntries = {};
+        for (let pair of formData.entries()) {
+          formEntries[pair[0]] = pair[1];
+        }
+        const data = {
+          userId: formEntries.userId,
+          email: formEntries.email,
+          phoneNumber: formEntries.phoneNumber,
+          redirectUrl: formEntries.redirectUrl,
+        };
+        let options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json;charset=utf-8",
+          },
+          body: JSON.stringify(data),
+        };
+        fetch(
+          "https://onlinemed-api.herokuapp.com/api/v1/users/unique-url",
+          // "http://localhost:5000/api/v1/users/unique-url",
+          options
+        )
+          .then((res) => res.json())
+          .then((d) => {
+            console.log(d);
+          })
+          .catch((err) => {
+            console.log("e", err);
+          });
+        return false;
+      };
+    </script>
+  </body>
+</html>
